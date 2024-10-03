@@ -250,26 +250,6 @@ RCT_EXPORT_METHOD(authorize:(NSDictionary*)options resolve:(RCTPromiseResolveBlo
     if(options[@"showDialog"] != nil){
         _sessionManager.alwaysShowAuthorizationDialog = [options[@"showDialog"] boolValue];
     }
-    
-    // Initialize the auth flow
-    if (@available(iOS 11, *)) {
-        RCTExecuteOnMainQueue(^{
-            // Use this on iOS 11 and above to take advantage of SFAuthenticationSession
-            [ self->_sessionManager
-                 initiateSessionWithScope:scope
-                 options:SPTDefaultAuthorizationOption
-            ];
-        });
-    } else {
-        RCTExecuteOnMainQueue(^{
-            // Use this on iOS versions < 11 to use SFSafariViewController
-            [ self->_sessionManager
-                initiateSessionWithScope:scope
-                options:SPTDefaultAuthorizationOption
-                presentingViewController:[UIApplication sharedApplication].keyWindow.rootViewController
-            ];
-        });
-    }
 }
 
 + (BOOL)requiresMainQueueSetup{
