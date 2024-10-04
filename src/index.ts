@@ -29,7 +29,7 @@ import { default as _remote } from "./SpotifyRemote";
  * import {auth} from 'react-native-spotify-remote'
  * ```
  */
-// export const auth = _auth;
+export const auth = _auth;
 
 /**
  * Singleton Instance of [[SpotifyRemoteApi]]

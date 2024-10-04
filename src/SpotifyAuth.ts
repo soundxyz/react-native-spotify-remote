@@ -65,38 +65,38 @@ export interface SpotifyAuth {
   getSession(): Promise<SpotifySession | undefined>;
 }
 
-// const SpotifyAuth = NativeModules.RNSpotifyRemoteAuth as SpotifyAuth;
+const SpotifyAuth = NativeModules.RNSpotifyRemoteAuth as SpotifyAuth;
 
-// // Augment the iOS implementation of authorize to convert the Android style scopes
-// // to flags
-// if (Platform.OS === "ios") {
-//     const iosAuthorize = NativeModules.RNSpotifyRemoteAuth.authorize;
-//     SpotifyAuth.authorize = (config: SpotifyApiConfig) => {
-//         const iosConfig = {
-//             ...API_CONFIG_DEFAULTS,
-//             ...config,
-//             scopes: getiOSScopeFromScopes(config.scopes)
-//         }
-//         return iosAuthorize(iosConfig);
-//     }
-// }
+// Augment the iOS implementation of authorize to convert the Android style scopes
+// to flags
+if (Platform.OS === "ios") {
+  const iosAuthorize = NativeModules.RNSpotifyRemoteAuth.authorize;
+  SpotifyAuth.authorize = (config: SpotifyApiConfig) => {
+    const iosConfig = {
+      ...API_CONFIG_DEFAULTS,
+      ...config,
+      scopes: getiOSScopeFromScopes(config.scopes),
+    };
+    return iosAuthorize(iosConfig);
+  };
+}
 
-// if(Platform.OS === "android"){
-//     const androidAuthorize = NativeModules.RNSpotifyRemoteAuth.authorize;
-//     SpotifyAuth.authorize = (config: SpotifyApiConfig) => {
-//         const mergedConfig = {
-//             ...API_CONFIG_DEFAULTS,
-//             ...config,
-//         }
-//         return androidAuthorize(mergedConfig);
-//     }
-// }
+if (Platform.OS === "android") {
+  const androidAuthorize = NativeModules.RNSpotifyRemoteAuth.authorize;
+  SpotifyAuth.authorize = (config: SpotifyApiConfig) => {
+    const mergedConfig = {
+      ...API_CONFIG_DEFAULTS,
+      ...config,
+    };
+    return androidAuthorize(mergedConfig);
+  };
+}
 
-// // todo: remove in future release
-// // Here for backwards compatability
-// SpotifyAuth.initialize = async (config: SpotifyApiConfig) => {
-//     const session = await SpotifyAuth.authorize(config);
-//     return session.accessToken;
-// }
+// todo: remove in future release
+// Here for backwards compatability
+SpotifyAuth.initialize = async (config: SpotifyApiConfig) => {
+  const session = await SpotifyAuth.authorize(config);
+  return session.accessToken;
+};
 
 export default SpotifyAuth;
